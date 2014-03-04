@@ -1,4 +1,4 @@
-# vk
+# vk [![GoDoc](https://godoc.org/github.com/OShalakhin/vk?status.png)](https://godoc.org/github.com/OShalakhin/vk)
 
 Go package for VKontakte API. It is work in progress and API may change.
 
