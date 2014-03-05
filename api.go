@@ -2,6 +2,7 @@ package vk
 
 import (
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -10,6 +11,8 @@ var (
 	Version = "5.12"
 	// APIURL is a base to make API calls
 	APIURL = "https://api.vk.com/method/"
+	// HTTPS defines if use https instead of http. 1 - use https. 0 - use http
+	HTTPS = 1
 )
 
 // API holds data to use for communication
@@ -53,7 +56,12 @@ func NewAPI(appID, secret string, scope []string, callback string) *API {
 }
 
 // getAPIURL prepares URL instance with defined method
-func getAPIURL(method string) *url.URL {
-	apiURL, _ := url.Parse(APIURL + method)
+func (api *API) getAPIURL(method string) *url.URL {
+	q := url.Values{
+		"v":            {Version},
+		"https":        {strconv.Itoa(HTTPS)},
+		"access_token": {api.AccessToken},
+	}.Encode()
+	apiURL, _ := url.Parse(APIURL + method + "?" + q)
 	return apiURL
 }

@@ -120,13 +120,11 @@ func (api *API) UsersGet(userIds []string, fields []string, nameCase string) ([]
 		return nil, errors.New("the only available name cases are: " + strings.Join(NameCases, ", "))
 	}
 
-	endpoint := getAPIURL("users.get")
+	endpoint := api.getAPIURL("users.get")
 	query := endpoint.Query()
 	query.Set("user_ids", strings.Join(userIds, ","))
 	query.Set("fields", strings.Join(fields, ","))
 	query.Set("name_case", nameCase)
-	query.Set("v", Version)
-	query.Set("access_token", api.AccessToken)
 	endpoint.RawQuery = query.Encode()
 
 	var err error
