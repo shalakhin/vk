@@ -23,6 +23,7 @@ type API struct {
 	AccessToken     string
 	Expiry          time.Time
 	UserID          string
+	UserEmail       string
 	callbackURL     *url.URL
 	requestTokenURL *url.URL
 	accessTokenURL  *url.URL

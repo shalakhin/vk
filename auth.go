@@ -15,6 +15,7 @@ type AccessToken struct {
 	AccessToken string        `json:"access_token"`
 	ExpiresIn   time.Duration `json:"expires_in"`
 	UserID      int           `json:"user_id"`
+	UserEmail   string        `json:"email"`
 }
 
 // AuthURL generates URL to authenticate via OAuth
@@ -62,6 +63,7 @@ func (api *API) Authenticate(code string) error {
 
 	tok.ExpiresIn *= time.Second
 	api.UserID = strconv.Itoa(tok.UserID)
+	api.UserEmail = tok.UserEmail
 	api.AccessToken = tok.AccessToken
 	api.Expiry = time.Now().Add(tok.ExpiresIn)
 
