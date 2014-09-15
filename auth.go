@@ -3,6 +3,7 @@ package vk
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -12,10 +13,12 @@ import (
 
 // AccessToken response from VK
 type AccessToken struct {
-	AccessToken string        `json:"access_token"`
-	ExpiresIn   time.Duration `json:"expires_in"`
-	UserID      int           `json:"user_id"`
-	UserEmail   string        `json:"email"`
+	AccessToken      string        `json:"access_token"`
+	ExpiresIn        time.Duration `json:"expires_in"`
+	UserID           int           `json:"user_id"`
+	UserEmail        string        `json:"email"`
+	Error            string        `json:"error"`
+	ErrorDescription string        `json:"error_description"`
 }
 
 // AuthURL generates URL to authenticate via OAuth
@@ -54,11 +57,13 @@ func (api *API) Authenticate(code string) error {
 		return err
 	}
 	defer resp.Body.Close()
-	// TODO handle errors response
-	// example string: {"error":"invalid_grant","error_description":"Code is expired."}"
 
 	if err = json.NewDecoder(resp.Body).Decode(&tok); err != nil {
 		return err
+	}
+
+	if tok.Error != "" {
+		return errors.New(tok.ErrorDescription)
 	}
 
 	tok.ExpiresIn *= time.Second
